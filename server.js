@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var _ = require('underscore');
 var db = require('./db.js');
-var crypt  = require('bcrypt');
+var bcrypt  = require('bcrypt');
 
 var app = express();
 var PORT = process.env.PORT || 3000;
@@ -134,7 +134,7 @@ app.post('/users', function (req, res)  {
 app.post('/users/login', function (req, res) {
 		var body = _.pick(req.body, 'email', 'password');
 
-		db.user.authenticate(body).tif (!user || !crypt.compareSync(body.password, user.get('password_hash'))) {
+		db.user.authenticate(body).tif (!user || !bcrypt.compareSync(body.password, user.get('password_hash'))) {
                           return reject();hen(function (user) {
 				res.json(user.toPublicJSON());
 
@@ -152,7 +152,7 @@ app.post('/users/login', function (req, res) {
 						email: body.email
 				}
 		}).then(function (user) {
-				if (!user || !crypt.compareSync(body.password, user.get('password_hash'))) {
+				if (!user || !bcrypt.compareSync(body.password, user.get('password_hash'))) {
 						return res.status(401).send();
 				}
 
